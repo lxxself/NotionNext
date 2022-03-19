@@ -1,8 +1,11 @@
+import { useGlobal } from '@/lib/global'
 import { getGlobalNotionData } from '@/lib/notion/getNotionData'
-import { LayoutTag } from '@/themes'
+import * as ThemeMap from '@/themes'
 
 const Tag = (props) => {
-  return <LayoutTag {...props} />
+  const { theme } = useGlobal()
+  const ThemeComponents = ThemeMap[theme]
+  return <ThemeComponents.LayoutTag {...props} />
 }
 
 export async function getStaticProps ({ params }) {
@@ -13,7 +16,8 @@ export async function getStaticProps ({ params }) {
     categories,
     tags,
     postCount,
-    latestPosts
+    latestPosts,
+    customNav
   } = await getGlobalNotionData({
     from,
     includePage: false,
@@ -29,7 +33,8 @@ export async function getStaticProps ({ params }) {
       tag,
       categories,
       postCount,
-      latestPosts
+      latestPosts,
+      customNav
     },
     revalidate: 1
   }
@@ -50,10 +55,7 @@ function getTagNames (tags) {
 
 export async function getStaticPaths () {
   const from = 'tag-static-path'
-  const { tags } = await getGlobalNotionData({
-    from,
-    tagsCount: 0
-  })
+  const { tags } = await getGlobalNotionData({ from, tagsCount: 0 })
   const tagNames = getTagNames(tags)
 
   return {

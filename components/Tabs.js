@@ -10,12 +10,18 @@ const Tabs = ({ className, children }) => {
     return <></>
   }
 
-  let count = children.length
+  children = children.filter(c => c !== '')
+
+  let count = 0
   children.forEach(e => {
-    if (!e) {
-      count--
+    if (e) {
+      count++
     }
   })
+
+  if (count === 0) {
+    return <></>
+  }
 
   if (count === 1) {
     return <section className={'duration-200 ' + className}>
@@ -43,9 +49,8 @@ const Tabs = ({ className, children }) => {
     </ul>
     <div>
       {children.map((item, index) => {
-        return <section key={index}
-                        className={`${currentTab === index ? 'block animate__animated animate__fadeIn animate__faster' : 'hidden'}`}>
-          {item}
+        return <section key={index} className={ 'animate__animated animate__fadeIn animate__faster'}>
+          {currentTab === index && item}
         </section>
       })}
     </div>
