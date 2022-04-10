@@ -3,45 +3,46 @@ import React from 'react'
 import { useGlobal } from '@/lib/global'
 import * as ThemeMap from '@/themes'
 
-export default function Category (props) {
+export default function Category(props) {
   const { theme } = useGlobal()
   const ThemeComponents = ThemeMap[theme]
-  return <ThemeComponents.LayoutCategory {...props} />
+  const { siteInfo, posts } = props
+  const { locale } = useGlobal()
+  if (!posts) {
+    return <ThemeComponents.Layout404 {...props} />
+  }
+  const meta = {
+    title: `${props.category} | ${locale.COMMON.CATEGORY} | ${
+      siteInfo?.title || ''
+    }`,
+    description: siteInfo?.description,
+    slug: 'category/' + props.category,
+    type: 'website'
+  }
+  return <ThemeComponents.LayoutCategory {...props} meta={meta} />
 }
 
-export async function getStaticProps ({ params }) {
+export async function getStaticProps({ params: { category } }) {
   const from = 'category-props'
-  const category = params.category
-  const {
-    allPosts,
-    categories,
-    tags,
-    postCount,
-    latestPosts,
-    customNav
-  } = await getGlobalNotionData({ from })
-  const filteredPosts = allPosts.filter(
+  let props = await getGlobalNotionData({ from })
+  const posts = props.allPosts.filter(
     post => post && post.category && post.category.includes(category)
   )
+  props = { ...props, posts, category }
+
   return {
-    props: {
-      tags,
-      posts: filteredPosts,
-      category,
-      categories,
-      postCount,
-      latestPosts,
-      customNav
-    },
+    props,
     revalidate: 1
   }
 }
 
-export async function getStaticPaths () {
+export async function getStaticPaths() {
   const from = 'category-paths'
   const { categories } = await getGlobalNotionData({ from })
   return {
-    paths: Object.keys(categories).map(category => ({ params: { category } })),
+    paths: Object.keys(categories).map(category => ({
+      params: { category: categories[category]?.name }
+    })),
     fallback: true
   }
 }

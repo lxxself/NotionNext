@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import BLOG from '@/blog.config'
+import { useGlobal } from '@/lib/global'
 import { loadExternalResource } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
@@ -8,11 +9,13 @@ export default function Live2D () {
     return <></>
   }
   const [init, setInit] = useState()
+  const { switchTheme } = useGlobal()
 
-  // if (typeof window !== 'undefined' && !hasLoad) {
-  //   initLive2D()
-  //   hasLoad = true
-  // }
+  function handleClick () {
+    if (BLOG.WIDGET_PET_SWITCH_THEME) {
+      switchTheme()
+    }
+  }
 
   useEffect(() => {
     if (!init) {
@@ -21,7 +24,7 @@ export default function Live2D () {
     }
   }, [init])
 
-  return <canvas id="live2d" className='animate__slideInUp animate__animated' width="280" height="250"/>
+  return <canvas id="live2d" className='cursor-pointer' width="280" height="250" onClick={handleClick} alt='切换主题' title='切换主题'/>
 }
 
 function initLive2D () {

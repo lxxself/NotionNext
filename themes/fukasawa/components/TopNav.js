@@ -8,7 +8,7 @@ import Logo from './Logo'
  * @param {*} param0
  * @returns
  */
-const TopNav = (props) => {
+const TopNav = props => {
   const [isOpen, changeShow] = useState(false)
 
   const toggleMenuOpen = () => {
@@ -18,16 +18,16 @@ const TopNav = (props) => {
   return (<div id='top-nav' className='z-40 block lg:hidden'>
 
     {/* 导航栏 */}
-    <div id='sticky-nav' className={'lg:relative w-full top-0 z-20 transform duration-500'}>
+    <div id='sticky-nav' className={'lg:relative w-full top-0 z-20 transform duration-500 bg-white dark:bg-black'}>
       <Collapse isOpen={isOpen}>
-        <div className='bg-white py-1 px-5'>
+        <div className='py-1 px-5'>
           <GroupMenu {...props}/>
           </div>
       </Collapse>
-      <div className='w-full flex justify-between items-center p-4 bg-white'>
+      <div className='w-full flex justify-between items-center p-4 '>
         {/* 左侧LOGO 标题 */}
         <div className='flex flex-none flex-grow-0'>
-          <Logo/>
+          <Logo {...props}/>
         </div>
         <div className='flex'>
         </div>

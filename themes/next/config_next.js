@@ -2,7 +2,6 @@ const CONFIG_NEXT = {
 
   HOME_BANNER: false, // 首页是否显示大图及标语 [true,false]
   HOME_BANNER_Strings: ['Hi，我是一个程序员', 'Hi，我是一个打工人', 'Hi，我是一个干饭人', '欢迎来到我的博客🎉'], // 首页大图标语文字
-  HOME_BANNER_IMAGE: './bg_image.jpg', // 背景图地址
 
   NAV_TYPE: 'normal', // ['fixed','autoCollapse','normal'] 分别是固定屏幕顶部、屏幕顶部自动折叠，不固定
 
@@ -13,7 +12,7 @@ const CONFIG_NEXT = {
 
   // 右侧组件
   RIGHT_BAR: true, // 是否显示右侧栏
-  RIGHT_LATEST_POSTS: false, // 右侧栏最新文章
+  RIGHT_LATEST_POSTS: true, // 右侧栏最新文章
   RIGHT_CATEGORY_LIST: true, // 右侧边栏文章分类列表
   RIGHT_TAG_LIST: true, // 右侧边栏标签分类列表
   RIGHT_AD: false, // 右侧广告

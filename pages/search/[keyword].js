@@ -1,21 +1,28 @@
 import { getGlobalNotionData } from '@/lib/notion/getNotionData'
-import BLOG from '@/blog.config'
 import { useGlobal } from '@/lib/global'
 import { getDataFromCache } from '@/lib/cache/cache_manager'
 import * as ThemeMap from '@/themes'
 
-const Index = (props) => {
-  const { keyword } = props
+const Index = props => {
+  const { keyword, siteInfo } = props
   const { locale } = useGlobal()
   const meta = {
-    title: `${keyword || ''} | ${locale.NAV.SEARCH} | ${BLOG.TITLE}  `,
-    description: BLOG.DESCRIPTION,
+    title: `${keyword || ''}${keyword ? ' | ' : ''}${locale.NAV.SEARCH} | ${
+      siteInfo.title
+    }`,
+    description: siteInfo.title,
+    slug: 'search/' + (keyword || ''),
     type: 'website'
   }
-
   const { theme } = useGlobal()
   const ThemeComponents = ThemeMap[theme]
-  return <ThemeComponents.LayoutSearch {...props} meta={meta} currentSearch={keyword} />
+  return (
+    <ThemeComponents.LayoutSearch
+      {...props}
+      meta={meta}
+      currentSearch={keyword}
+    />
+  )
 }
 
 /**
@@ -23,27 +30,15 @@ const Index = (props) => {
  * @param {*} param0
  * @returns
  */
-export async function getServerSideProps ({ params: { keyword } }) {
-  const {
-    allPosts,
-    categories,
-    tags,
-    postCount,
-    latestPosts,
-    customNav
-  } = await getGlobalNotionData({ from: 'search-props', pageType: ['Post'] })
-
-  const filterPosts = await filterByMemCache(allPosts, keyword)
+export async function getServerSideProps({ params: { keyword } }) {
+  const props = await getGlobalNotionData({
+    from: 'search-props',
+    pageType: ['Post']
+  })
+  props.posts = await filterByMemCache(props.allPosts, keyword)
+  props.keyword = keyword
   return {
-    props: {
-      posts: filterPosts,
-      tags,
-      categories,
-      postCount,
-      latestPosts,
-      customNav,
-      keyword
-    }
+    props
   }
 }
 
@@ -54,7 +49,7 @@ export async function getServerSideProps ({ params: { keyword } }) {
  * @param key
  * @returns {*}
  */
-function appendText (sourceTextArray, targetObj, key) {
+function appendText(sourceTextArray, targetObj, key) {
   if (!targetObj) {
     return sourceTextArray
   }
@@ -71,7 +66,7 @@ function appendText (sourceTextArray, targetObj, key) {
  * @param {*} textArray
  * @returns
  */
-function getTextContent (textArray) {
+function getTextContent(textArray) {
   if (typeof textArray === 'object' && isIterable(textArray)) {
     let result = ''
     for (const textObj of textArray) {
@@ -88,7 +83,8 @@ function getTextContent (textArray) {
  * @param {*} obj
  * @returns
  */
-const isIterable = obj => obj != null && typeof obj[Symbol.iterator] === 'function'
+const isIterable = obj =>
+  obj != null && typeof obj[Symbol.iterator] === 'function'
 
 /**
  * 在内存缓存中进行全文索引
@@ -96,7 +92,7 @@ const isIterable = obj => obj != null && typeof obj[Symbol.iterator] === 'functi
  * @param keyword 关键词
  * @returns
  */
-async function filterByMemCache (allPosts, keyword) {
+async function filterByMemCache(allPosts, keyword) {
   const filterPosts = []
   for (const post of allPosts) {
     const cacheKey = 'page_block_' + post.id
@@ -120,7 +116,10 @@ async function filterByMemCache (allPosts, keyword) {
     let hitCount = 0
     for (const i in indexContent) {
       const c = indexContent[i]
-      const index = c.toLowerCase().indexOf(keyword.toLowerCase())
+      if (!c) {
+        continue
+      }
+      const index = c.toLowerCase().indexOf(keyword.toLowerCase()) || -1
       if (index > -1) {
         hit = true
         hitCount += 1

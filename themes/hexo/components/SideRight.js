@@ -5,22 +5,22 @@ import TagGroups from './TagGroups'
 import Catalog from './Catalog'
 import { InfoCard } from './InfoCard'
 import { AnalyticsCard } from './AnalyticsCard'
-
-export default function SideRight (props) {
+import CONFIG_HEXO from '../config_hexo'
+export default function SideRight(props) {
   const {
     post, currentCategory, categories, latestPosts, tags,
     currentTag, showCategory, showTag, slot
   } = props
 
   return (
-    <div className={'md:w-80 p-2 space-y-4'}>
-      <InfoCard {...props}/>
-      <AnalyticsCard {...props}/>
+    <div className={'lg:w-80 px-2 space-y-4 pt-4 lg:pt-0'}>
+      <InfoCard {...props} />
+      {CONFIG_HEXO.WIDGET_ANALYTICS && <AnalyticsCard {...props} />}
 
       {showCategory && (
         <Card>
           <div className='ml-2 mb-1 font-sans'>
-            <i className='fas fa-th'/> 分类
+            <i className='fas fa-th' /> 分类
           </div>
           <CategoryGroup
             currentCategory={currentCategory}
@@ -33,12 +33,12 @@ export default function SideRight (props) {
           <TagGroups tags={tags} currentTag={currentTag} />
         </Card>
       )}
-      {latestPosts && <Card>
-        <LatestPostsGroup posts={latestPosts} />
+      {CONFIG_HEXO.WIDGET_LATEST_POSTS && latestPosts && latestPosts.length > 0 && <Card>
+        <LatestPostsGroup {...props} />
       </Card>}
 
       <div className='sticky top-20'>
-       {post && post.toc && <Card>
+        {post && post.toc && <Card>
           <Catalog toc={post.toc} />
         </Card>}
         {slot}

@@ -1,4 +1,3 @@
-import BLOG from '@/blog.config'
 import Logo from './Logo'
 import GroupCategory from './GroupCategory'
 import GroupMenu from './GroupMenu'
@@ -6,11 +5,13 @@ import GroupTag from './GroupTag'
 import SearchInput from './SearchInput'
 import SiteInfo from './SiteInfo'
 import Catalog from './Catalog'
+import { useRouter } from 'next/router'
 
 function AsideLeft (props) {
-  const { tags, currentTag, categories, currentCategory, post, slot } = props
+  const { tags, currentTag, categories, currentCategory, post, slot, siteInfo } = props
+  const router = useRouter()
   return <div className='w-72 bg-white dark:bg-gray-800 min-h-screen px-10 py-14 hidden lg:block'>
-    <Logo />
+    <Logo {...props}/>
 
     <section className='flex flex-col text-gray-600'>
       <hr className='w-12 my-8' />
@@ -24,18 +25,18 @@ function AsideLeft (props) {
 
     <section className='flex flex-col dark:text-gray-300'>
       <hr className='w-12 my-8' />
-      { BLOG.DESCRIPTION }
+      { siteInfo.description }
     </section>
 
-    <section className='flex flex-col'>
+    {router.asPath !== '/tag' && <section className='flex flex-col'>
       <hr className='w-12 my-8 ' />
       <GroupTag tags={tags} currentTag={currentTag}/>
-    </section>
+    </section>}
 
-    <section className='flex flex-col'>
+    {router.asPath !== '/category' && <section className='flex flex-col'>
       <hr className='w-12 my-8 ' />
       <GroupCategory categories={categories} currentCategory={currentCategory}/>
-    </section>
+    </section>}
 
     <section className='flex flex-col'>
       <hr className='w-12 my-8 ' />
@@ -45,7 +46,7 @@ function AsideLeft (props) {
     <section className='sticky top-0 pt-12'>
       <Catalog toc={post?.toc}/>
       <div className='flex justify-center'>
-        {slot}
+        <div>{slot}</div>
       </div>
     </section>
   </div>

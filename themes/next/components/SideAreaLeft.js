@@ -18,7 +18,7 @@ import CONFIG_NEXT from '../config_next'
  * @returns {JSX.Element}
  * @constructor
  */
-const SideAreaLeft = (props) => {
+const SideAreaLeft = props => {
   const { post, slot, postCount } = props
   const { locale } = useGlobal()
   const showToc = post && post.toc && post.toc.length > 1
@@ -26,8 +26,8 @@ const SideAreaLeft = (props) => {
 
     <section className='w-60'>
       {/* 菜单 */}
-      <section className='shadow hidden lg:block mb-5 pb-4 bg-white dark:bg-gray-800 hover:shadow-xl duration-200'>
-        <Logo/>
+      <section className='shadow hidden lg:block mb-5 pb-4 bg-white dark:bg-hexo-black-gray hover:shadow-xl duration-200'>
+        <Logo {...props}/>
         <div className='pt-2 px-2 font-sans'>
         <MenuButtonGroup allowCollapse={true} {...props} />
         </div>
@@ -41,12 +41,12 @@ const SideAreaLeft = (props) => {
     <Card>
       <Tabs>
           {showToc && (
-            <div key={locale.COMMON.TABLE_OF_CONTENTS} className='dark:text-gray-400 text-gray-600 bg-white dark:bg-gray-800 duration-200'>
+            <div key={locale.COMMON.TABLE_OF_CONTENTS} className='dark:text-gray-400 text-gray-600 bg-white dark:bg-hexo-black-gray duration-200'>
               <Toc toc={post.toc}/>
             </div>
           )}
 
-          <div key={locale.NAV.ABOUT} className='mb-5 bg-white dark:bg-gray-800 duration-200 py-6'>
+          <div key={locale.NAV.ABOUT} className='mb-5 bg-white dark:bg-hexo-black-gray duration-200 py-6'>
             <InfoCard />
             <>
               <div className='mt-2 text-center dark:text-gray-300 font-light text-xs'>

@@ -8,6 +8,9 @@ import TopNav from './components/TopNav'
 import smoothscroll from 'smoothscroll-polyfill'
 import FloatDarkModeButton from './components/FloatDarkModeButton'
 import Live2D from '@/components/Live2D'
+import LoadingCover from './components/LoadingCover'
+import { useGlobal } from '@/lib/global'
+import BLOG from '@/blog.config'
 
 /**
  * 基础布局 采用左右两侧布局，移动端使用顶部导航栏
@@ -16,10 +19,11 @@ import Live2D from '@/components/Live2D'
  * @constructor
  */
 const LayoutBase = (props) => {
-  const { children, headerSlot, floatSlot, meta } = props
+  const { children, headerSlot, floatSlot, meta, siteInfo } = props
   const [show, switchShow] = useState(false)
   // const [percent, changePercent] = useState(0) // 页面阅读百分比
-  const rightAreaSlot = <Live2D/>
+  const rightAreaSlot = <Live2D />
+  const { onLoading } = useGlobal()
 
   const scrollListener = () => {
     const targetRef = document.getElementById('wrapper')
@@ -41,31 +45,35 @@ const LayoutBase = (props) => {
     return () => document.removeEventListener('scroll', scrollListener)
   }, [show])
 
-  return (<div className='bg-white dark:bg-gray-900'>
+  return (<div className='bg-hexo-background-gray dark:bg-black'>
     <CommonHead meta={meta} />
-    <TopNav {...props}/>
+
+    <TopNav {...props} />
 
     {headerSlot}
 
-    <main id='wrapper' className='w-full justify-center py-8 min-h-screen'>
+    <main id='wrapper' className='w-full py-8 min-h-screen'>
 
-      <div id='container-inner' className='pt-14 w-full mx-auto lg:flex justify-between md:space-x-4 max-w-7xl'>
-        <div className='flex-grow w-full'>{children}</div>
-        <SideRight {...props} slot={rightAreaSlot}/>
+      <div id='container-inner' className='pt-14 w-full mx-auto lg:flex justify-center lg:space-x-4'>
+        <div className='flex-grow w-full lg:max-w-4xl'>
+          {onLoading ? <LoadingCover /> : children}
+        </div>
+
+        <SideRight {...props} slot={rightAreaSlot} />
       </div>
 
     </main>
 
-     {/* 右下角悬浮 */}
-     <div className='bottom-12 right-1 fixed justify-end z-20 font-sans text-white bg-blue-400 rounded'>
-        <div className={(show ? 'animate__animated ' : 'hidden') + ' animate__fadeInUp justify-center duration-300  animate__faster flex flex-col items-center cursor-pointer '}>
-          <FloatDarkModeButton/>
-          {floatSlot}
-          <JumpToTopButton/>
-        </div>
+    {/* 右下角悬浮 */}
+    <div className='bottom-12 right-1 fixed justify-end z-20 font-sans text-white bg-indigo-500 dark:bg-hexo-black-gray rounded-sm'>
+      <div className={(show ? 'animate__animated ' : 'hidden') + ' animate__fadeInUp justify-center duration-300  animate__faster flex flex-col items-center cursor-pointer '}>
+        <FloatDarkModeButton />
+        {floatSlot}
+        <JumpToTopButton />
       </div>
+    </div>
 
-    <Footer title={meta.title}/>
+    <Footer title={siteInfo?.title || BLOG.TITLE} />
 
   </div>)
 }
