@@ -4,12 +4,15 @@ import formatDate from '@/lib/formatDate'
 import { useEffect } from 'react'
 
 export default function HeaderArticle({ post, siteInfo }) {
+  if (!post) {
+    return <>loading...</>
+  }
   const headerImage = post?.page_cover ? `url("${post.page_cover}")` : `url("${siteInfo?.pageCover}")`
   const { isDarkMode } = useGlobal()
 
   const { locale } = useGlobal()
   const date = formatDate(
-    post?.date?.start_date || post.createdTime,
+    post?.date?.start_date || post?.createdTime,
     locale.LOCALE
   )
 
@@ -63,7 +66,7 @@ export default function HeaderArticle({ post, siteInfo }) {
             <div className='dark:text-gray-200'>
               {post.category && <>
                 <Link href={`/category/${post.category}`} passHref>
-                  <div className="cursor-pointer mr-2 dark:hover:text-white border-b dark:border-gray-500 border-dashed">
+                  <div className="cursor-pointer mr-2 dark:hover:text-white hover:underline">
                     <i className="mr-1 fas fa-folder-open" />
                     {post.category}
                   </div>
@@ -71,13 +74,13 @@ export default function HeaderArticle({ post, siteInfo }) {
               </>}
             </div>
             <div className='flex justify-center'>
-              {post.type[0] !== 'Page' && (
+              {post?.type[0] !== 'Page' && (
                 <>
                   <Link
                     href={`/archive#${post?.date?.start_date?.substr(0, 7)}`}
                     passHref
                   >
-                    <a className="pl-1 mr-2 cursor-pointer border-b dark:border-gray-500 border-dashed">
+                    <a className="pl-1 mr-2 cursor-pointer hover:underline">
                       {locale.COMMON.POST_TIME}: {date}
                     </a>
                   </Link>
