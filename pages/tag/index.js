@@ -9,8 +9,9 @@ const TagIndex = props => {
   const { locale } = useGlobal()
   const { siteInfo } = props
   const meta = {
-    title: `${locale.COMMON.TAGS} | ${siteInfo.title}`,
-    description: siteInfo.description,
+    title: `${locale.COMMON.TAGS} | ${siteInfo?.title}`,
+    description: siteInfo?.description,
+    image: siteInfo?.pageCover,
     slug: 'tag',
     type: 'website'
   }
@@ -19,7 +20,7 @@ const TagIndex = props => {
 
 export async function getStaticProps() {
   const from = 'tag-index-props'
-  const props = await getGlobalNotionData({ from, tagsCount: 0 })
+  const props = await getGlobalNotionData({ from })
   return {
     props,
     revalidate: 1

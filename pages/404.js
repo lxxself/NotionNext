@@ -8,18 +8,15 @@ import { useGlobal } from '@/lib/global'
  * @returns
  */
 const NoFound = props => {
-  const { theme } = useGlobal()
+  const { theme, siteInfo } = useGlobal()
   const ThemeComponents = ThemeMap[theme]
-  const meta = { title: `${props?.siteInfo?.title} | 页面找不到啦` }
+  const meta = { title: `${props?.siteInfo?.title} | 页面找不到啦`, image: siteInfo?.pageCover }
   return <ThemeComponents.Layout404 {...props} meta={meta}/>
 }
 
 export async function getStaticProps () {
-  const props = await getGlobalNotionData({ from: 'category-index-props', categoryCount: 0 })
-  return {
-    props,
-    revalidate: 1
-  }
+  const props = await getGlobalNotionData({ from: '404' }) || {}
+  return { props }
 }
 
 export default NoFound

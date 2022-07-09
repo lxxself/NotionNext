@@ -7,15 +7,15 @@ export const LayoutArchive = props => {
   const postsSortByDate = Object.create(posts)
 
   postsSortByDate.sort((a, b) => {
-    const dateA = new Date(a?.date.start_date || a.createdTime)
-    const dateB = new Date(b?.date.start_date || b.createdTime)
+    const dateA = new Date(a?.date?.start_date || a.createdTime)
+    const dateB = new Date(b?.date?.start_date || b.createdTime)
     return dateB - dateA
   })
 
   const archivePosts = {}
 
   postsSortByDate.forEach(post => {
-    const date = post.date.start_date.slice(0, 7)
+    const date = post.date?.start_date.slice(0, 7)
     if (archivePosts[date]) {
       archivePosts[date].push(post)
     } else {
@@ -24,15 +24,13 @@ export const LayoutArchive = props => {
   })
   return (
     <LayoutBase {...props}>
-      <div className="mb-10 pb-20 md:p-12 p-3  min-h-full">
+      <div className="mb-10 pb-20 md:py-12 p-3  min-h-screen w-full">
         {Object.keys(archivePosts).map(archiveTitle => (
           <div key={archiveTitle}>
-            <div
-              className="pt-16 pb-4 text-3xl dark:text-gray-300"
-              id={archiveTitle}
-            >
+            <div id={archiveTitle} className="pt-16 pb-4 text-3xl dark:text-gray-300" >
               {archiveTitle}
             </div>
+
             <ul>
               {archivePosts[archiveTitle].map(post => (
                 <li
@@ -41,7 +39,7 @@ export const LayoutArchive = props => {
                 >
                   <div id={post?.date?.start_date}>
                     <span className="text-gray-400">
-                      {post.date.start_date}
+                      {post.date?.start_date}
                     </span>{' '}
                     &nbsp;
                     <Link

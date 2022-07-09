@@ -33,7 +33,7 @@ const BlogPostCard = ({ post, showSummary }) => {
             >
               <a className="font-light hover:underline cursor-pointer text-sm leading-4 mr-3">
                 <i className="far fa-calendar-alt mr-1" />
-                {post.date.start_date}
+                {post.date?.start_date || post.lastEditedTime}
               </a>
             </Link>
           </div>
@@ -85,7 +85,7 @@ const BlogPostCard = ({ post, showSummary }) => {
               <img
                 src={post?.page_cover}
                 alt={post.title}
-                className="hover:scale-125 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none transform object-cover duration-500"
+                className="max-h-52 lg:max-h-72 w-full hover:scale-125 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none transform object-cover duration-500"
               />
               {/* <Image className='hover:scale-125 rounded-t-xl lg:rounded-r-xl lg:rounded-t-none transform duration-500' src={post?.page_cover} alt={post.title} layout='fill' objectFit='cover' loading='lazy' /> */}
             </div>

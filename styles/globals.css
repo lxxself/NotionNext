@@ -113,6 +113,7 @@ nav {
 .scroll-hidden{
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
+  scrollbar-width: none; /* firefox */
 }
 
 .scroll-hidden::-webkit-scrollbar { width: 0 !important }
@@ -136,8 +137,41 @@ nav {
 
 .medium-zoom-overlay{
   background: none !important;
+  /* background: rgba(0, 0, 0, 0.01) none repeat scroll 0% 0% !important; */
 }
 
 .shadow-text{
   text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+.notion-code-copy-button > svg{
+  pointer-events:none
+}
+
+.fireworks{
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+[data-waline] p {
+  color: var(--waline-color);
+  @apply dark:text-gray-200 !important
+}
+
+.waline-recent-content p{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.vcontent .wl-emoji {
+  display: inline-block;
+  vertical-align: baseline;
+  height: 1.25em;
+  margin: -.125em .25em;
 }

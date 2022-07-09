@@ -12,8 +12,9 @@ const Page = props => {
     return <></>
   }
   const meta = {
-    title: `${props.page} | Page | ${siteInfo.title}`,
-    description: siteInfo.description,
+    title: `${props.page} | Page | ${siteInfo?.title}`,
+    description: siteInfo?.description,
+    image: siteInfo?.pageCover,
     slug: 'page/' + props.page,
     type: 'website'
   }
