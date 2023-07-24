@@ -16,15 +16,20 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: ['react'],
+  plugins: [
+    'react',
+    'react-hooks'
+  ],
   settings: {
     react: {
       version: 'detect'
     }
   },
   rules: {
+    'react/no-unknown-property': 'off', // <style jsx>
     'react/prop-types': 'off',
-    'space-before-function-paren': 0
+    'space-before-function-paren': 0,
+    'react-hooks/rules-of-hooks': 'error' // Checks rules of Hooks
   },
   globals: {
     React: true

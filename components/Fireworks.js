@@ -2,24 +2,25 @@
  * https://codepen.io/juliangarnier/pen/gmOwJX
  * custom by hexo-theme-yun @YunYouJun
  */
-import React from 'react'
+import { useEffect } from 'react'
 import anime from 'animejs'
+import BLOG from 'blog.config'
 
-export const Fireworks = () => {
-  React.useEffect(() => {
+const Fireworks = () => {
+  useEffect(() => {
     createFireworks({})
   }, [])
   return <canvas id='fireworks' className='fireworks'></canvas>
 }
+export default Fireworks
 
 /**
    * 创建烟花
    * @param config
    */
 function createFireworks(config) {
-  const defaultColors = ['102, 167, 221', '62, 131, 225', '33, 78, 194']
   const defaultConfig = {
-    colors: defaultColors,
+    colors: BLOG.FIREWORKS_COLOR,
     numberOfParticules: 20,
     orbitRadius: {
       min: 50,
@@ -44,7 +45,7 @@ function createFireworks(config) {
   let pointerY = 0
 
   // sky blue
-  const colors = config.colors || defaultColors
+  const colors = config.colors
 
   const canvasEl = document.querySelector('.fireworks')
   const ctx = canvasEl.getContext('2d')

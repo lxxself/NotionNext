@@ -4,27 +4,37 @@ import BLOG from '@/blog.config'
 import CommonScript from '@/components/CommonScript'
 
 class MyDocument extends Document {
-  static async getInitialProps (ctx) {
+  static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx)
     return { ...initialProps }
   }
 
-  render () {
+  render() {
     return (
-      <Html lang={BLOG.LANG} className='test'>
-        <Head>
-          <link rel='icon' href='/favicon.ico' />
-          <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
-          {/* 谷歌字体镜像 */}
-          <link href="https://fonts.loli.net/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet"/>
-          <CommonScript />
-        </Head>
+            <Html lang={BLOG.LANG}>
+                <Head>
+                <link rel='icon' href= {`${BLOG.BLOG_FAVICON}`} />
+                  <CommonScript />
+                  {/* 预加载字体 */}
+                  {BLOG.FONT_AWESOME && <>
+                      <link rel='preload' href={BLOG.FONT_AWESOME} as="style" crossOrigin="anonymous" />
+                      <link rel="stylesheet" href={BLOG.FONT_AWESOME} crossOrigin="anonymous" referrerPolicy="no-referrer" />
+                  </>}
 
-        <body className={`${BLOG.FONT} bg-day dark:bg-night`}>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
+                  {BLOG.FONT_URL?.map((fontUrl, index) => {
+                    if (fontUrl.endsWith('.css')) {
+                      return <link key={index} rel="stylesheet" href={fontUrl} />
+                    } else {
+                      return <link key={index} rel="preload" href={fontUrl} as="font" type="font/woff2" />
+                    }
+                  })}
+                </Head>
+
+                <body className={`${BLOG.FONT_STYLE} font-light scroll-smooth`}>
+                    <Main />
+                    <NextScript />
+                </body>
+            </Html>
     )
   }
 }
